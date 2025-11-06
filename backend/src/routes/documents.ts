@@ -27,27 +27,43 @@ router.post("/upload", upload.single("file"), (req: Request, res: Response) => {
   if (!req.file) return res.status(400).json({ error: "Nenhum arquivo enviado" });
 
   res.json({
-    message: "Upload realizado com sucesso!",
-    file: {
-      name: req.file.originalname,
-      path: req.file.path,
-    },
-  });
+  message: "Upload realizado com sucesso!",
+  file: {
+    originalName: req.file.originalname,
+    savedName: req.file.filename, // nome real salvo no disco
+    size: req.file.size,
+    uploadDate: new Date(),
+  },
+});
 });
 
 router.get("/", (_: Request, res: Response) => {
-  const files = fs.readdirSync(uploadDir);
+  const files = fs.readdirSync(uploadDir).map((file) => {
+    const stats = fs.statSync(path.join(uploadDir, file));
+    return {
+      filename: file,
+      size: stats.size,
+      uploadDate: stats.birthtime,
+    };
+  });
+
   res.json(files);
 });
 
 router.delete("/:filename", (req: Request, res: Response) => {
   const filePath = path.join(uploadDir, req.params.filename);
+
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: "Arquivo não encontrado" });
   }
 
-  fs.unlinkSync(filePath);
-  res.json({ message: "Arquivo deletado com sucesso!" });
+  try {
+    fs.unlinkSync(filePath);
+    res.json({ message: "Arquivo deletado com sucesso!" });
+  } catch (err) {
+    console.error("Erro ao deletar arquivo:", err);
+    res.status(500).json({ error: "Erro ao deletar arquivo" });
+  }
 });
 
 export default router;

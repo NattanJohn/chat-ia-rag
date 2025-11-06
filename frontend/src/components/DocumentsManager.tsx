@@ -1,57 +1,74 @@
 import React, { useState, useEffect } from "react";
+import { listDocuments, uploadDocument, deleteDocument } from "../services/api";
 
 interface UploadedFile {
   name: string;
-  type: string;
   size: number;
   date: string;
 }
 
-const allowedTypes = [
-  "application/pdf",
-  "text/plain",
-  "text/markdown",
-];
+interface DocumentResponse {
+  filename: string;
+  size: number;
+  uploadDate: string;
+}
 
 export const DocumentsManager: React.FC = () => {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [uploading, setUploading] = useState(false);
 
+  const fetchDocuments = async () => {
+  try {
+    const docs: DocumentResponse[] = await listDocuments();
+
+    const formatted = docs.map((doc) => ({
+      name: doc.filename,
+      size: doc.size || 0,
+      date: new Date(doc.uploadDate).toLocaleString("pt-BR"),
+    }));
+
+    setFiles(formatted);
+  } catch (err) {
+    console.error("Erro ao listar documentos:", err);
+  }
+};
+
   useEffect(() => {
-    const stored = localStorage.getItem("uploaded_docs");
-    if (stored) setFiles(JSON.parse(stored));
+    fetchDocuments();
   }, []);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
-    if (!selected) return;
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const selected = e.target.files?.[0];
+  if (!selected) return;
 
-    if (!allowedTypes.includes(selected.type)) {
-      alert("Formato inválido. Envie PDF, TXT ou MD.");
-      return;
-    }
+  const formData = new FormData();
+  formData.append("file", selected);
 
-    setUploading(true);
-    setTimeout(() => {
-      const newFile: UploadedFile = {
-        name: selected.name,
-        type: selected.type,
-        size: selected.size,
-        date: new Date().toLocaleString(),
-      };
+  setUploading(true);
+  try {
+    const res = await uploadDocument(formData);
+    console.log("Upload:", res);
+    await fetchDocuments();
+  } catch (err) {
+    alert("Erro ao enviar o arquivo!");
+    console.error(err);
+  } finally {
+    setUploading(false);
+  }
+};
 
-      const updated = [...files, newFile];
-      setFiles(updated);
-      localStorage.setItem("uploaded_docs", JSON.stringify(updated));
-      setUploading(false);
-    }, 1000);
-  };
+  const handleDelete = async (filename: string) => {
+  if (!window.confirm(`Tem certeza que deseja deletar "${filename}"?`)) return;
 
-  const handleDelete = (name: string) => {
-    const updated = files.filter((f) => f.name !== name);
-    setFiles(updated);
-    localStorage.setItem("uploaded_docs", JSON.stringify(updated));
-  };
+  try {
+    await deleteDocument(filename);
+    alert(`✅ Arquivo "${filename}" deletado com sucesso!`);
+    await fetchDocuments();
+  } catch (err) {
+    console.error(err);
+    alert(`❌ Erro ao deletar o arquivo "${filename}".`);
+  }
+};
 
   return (
     <div
@@ -114,7 +131,7 @@ export const DocumentsManager: React.FC = () => {
               <div>
                 <strong>{file.name}</strong>
                 <p style={{ fontSize: "0.8rem", color: "#AAA" }}>
-                  {file.type} • {(file.size / 1024).toFixed(1)} KB • {file.date}
+                  {(file.size / 1024).toFixed(1)} KB • {file.date}
                 </p>
               </div>
               <button

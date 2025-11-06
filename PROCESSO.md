@@ -53,3 +53,22 @@ Nesta etapa foi implementado o backend do módulo de RAG, incluindo:
 - Utilização do **multer** para gerenciamento dos uploads.  
 - Funções utilitárias em `utils/fileHandler.ts` para leitura e exclusão segura dos arquivos.  
 - Estrutura pronta para futura integração com o frontend e expansão para o sistema RAG completo.
+
+---
+
+## 🔹 Etapa 6 — Integração Frontend e Backend: Upload, Listagem e Deleção de Documentos  
+**Commit:** `[AI] Integrate document upload, listing and deletion with frontend and backend`  
+**Prompt:** “Integrate the document upload, listing, and deletion system with React and Express, providing user feedback and real-time updates.”
+
+Nesta etapa foi realizada a **integração completa** entre o frontend (React) e o backend (Express) para o módulo de documentos do sistema RAG.  
+
+Foram implementadas as seguintes funcionalidades:  
+- Conexão do frontend com o backend via **Axios** (`src/services/api.ts`).  
+- Criação do componente **DocumentsManager**, responsável por:  
+  - Fazer upload de arquivos (`PDF`, `TXT`, `MD`).  
+  - Exibir lista de arquivos com nome, tamanho e data formatada.  
+  - Permitir exclusão com confirmação e feedback visual via `alert()`.  
+- Atualização automática da lista após operações de upload ou deleção.  
+- Feedbacks visuais e tratamento de erros no frontend.  
+
+O sistema agora possui gerenciamento completo de documentos com armazenamento local no servidor, comunicação via API REST e experiência interativa no painel.  
