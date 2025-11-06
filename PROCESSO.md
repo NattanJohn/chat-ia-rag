@@ -71,4 +71,9 @@ Foram implementadas as seguintes funcionalidades:
 - Atualização automática da lista após operações de upload ou deleção.  
 - Feedbacks visuais e tratamento de erros no frontend.  
 
-O sistema agora possui gerenciamento completo de documentos com armazenamento local no servidor, comunicação via API REST e experiência interativa no painel.  
+O sistema agora possui gerenciamento completo de documentos com armazenamento local no servidor, comunicação via API REST e experiência interativa no painel. 
+
+---
+
+## 5. Integração WhatsApp
+- Status: ❌ Não concluído (problemas com instância e teste da API Evolution)

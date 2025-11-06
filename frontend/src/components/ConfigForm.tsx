@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export const ConfigForm: React.FC = () => {
   const [apiKey, setApiKey] = useState("");
   const [model, setModel] = useState("gpt-4");
   const [systemPrompt, setSystemPrompt] = useState("");
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState("desconectado");
 
   useEffect(() => {
     const savedApiKey = localStorage.getItem("openrouter_api_key") || "";
@@ -13,6 +16,21 @@ export const ConfigForm: React.FC = () => {
     setApiKey(savedApiKey);
     setModel(savedModel);
     setSystemPrompt(savedPrompt);
+
+    // 🔹 Pega o QR code se a instância estiver conectando
+    const fetchQrCode = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/instance/qrcode"); // endpoint que retorna o qrcode base64
+        if (res.data?.qrcode) {
+          setQrCode(res.data.qrcode); // base64
+          setConnectionStatus(res.data.status); // "connecting" ou "connected"
+        }
+      } catch (err) {
+        console.error("Erro ao buscar QR code:", err);
+      }
+    };
+
+    fetchQrCode();
   }, []);
 
   const handleSave = () => {
@@ -39,6 +57,18 @@ export const ConfigForm: React.FC = () => {
         ⚙️ Painel de Configurações
       </h2>
 
+      {/* 🔹 QR Code Section */}
+      {connectionStatus === "connecting" && qrCode && (
+        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+          <p style={{ color: "#FFF" }}>📱 Escaneie o QR code no WhatsApp</p>
+          <img src={qrCode} alt="QR Code WhatsApp" style={{ width: 200, height: 200 }} />
+        </div>
+      )}
+      {connectionStatus === "connected" && (
+        <p style={{ color: "#00FF00", textAlign: "center" }}>✅ WhatsApp conectado</p>
+      )}
+
+      {/* 🔹 Configurações já existentes */}
       <label style={{ display: "block", marginTop: 16 }}>API Key da OpenRouter:</label>
       <input
         type="text"
