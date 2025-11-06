@@ -28,4 +28,16 @@ O objetivo foi construir a base funcional do painel de configurações, garantin
 Aplicado um **redesign completo** no componente de configurações:
 - Implementado tema **dark mode** com gradiente e tipografia moderna.  
 - Layout centralizado, espaçamento ajustado e cores mais contrastantes.  
-- Início da **responsividade**, a ser aprimorada em commits futuros. 
+- Início da **responsividade**, a ser aprimorada em commits futuros.
+
+---
+
+
+## 🔹 Etapa 4 - RAG: Sistema de Documentos (Início)
+**Commit:**
+[AI] Setup routing and create DocumentsPage  
+Prompt: Add React Router setup and create a DocumentsPage component for managing RAG documents
+
+Nesta etapa foi configurado o roteamento com `react-router-dom` e criada a página `DocumentsPage`.
+O próximo passo será implementar o sistema de upload e listagem de arquivos (PDF, TXT, MD),
+que fará parte do módulo de RAG.
