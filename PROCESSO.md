@@ -41,3 +41,15 @@ Prompt: Add React Router setup and create a DocumentsPage component for managing
 Nesta etapa foi configurado o roteamento com `react-router-dom` e criada a página `DocumentsPage`.
 O próximo passo será implementar o sistema de upload e listagem de arquivos (PDF, TXT, MD),
 que fará parte do módulo de RAG.
+
+---
+
+## 🔹 Etapa 5 — Backend: Upload, Listagem e Exclusão de Documentos
+**Commit:** `[AI] Implement Express routes for RAG document management`  
+**Prompt:** “Create Express routes using multer for uploading PDF, TXT, and MD files, with support for listing and deleting files.”
+
+Nesta etapa foi implementado o backend do módulo de RAG, incluindo:
+- Criação das rotas em **Express** para upload, listagem e exclusão de documentos.  
+- Utilização do **multer** para gerenciamento dos uploads.  
+- Funções utilitárias em `utils/fileHandler.ts` para leitura e exclusão segura dos arquivos.  
+- Estrutura pronta para futura integração com o frontend e expansão para o sistema RAG completo.
