@@ -77,3 +77,19 @@ O sistema agora possui gerenciamento completo de documentos com armazenamento lo
 
 ## 5. Integração WhatsApp
 - Status: ❌ Não concluído (problemas com instância e teste da API Evolution)
+
+
+## 🔹 Etapa 7 — Integração com Banco de Dados PostgreSQL
+**Commit:** `[AI] Integrate PostgreSQL for document management`  
+**Prompt:** “Implement PostgreSQL integration for storing uploaded document metadata, including filename, original name, size, path, and upload date. Adjust Express routes to save, list, and delete documents from the database.”
+
+Nesta etapa foi feita a **integração completa do backend com PostgreSQL**, permitindo persistência dos documentos enviados pelo sistema RAG.  
+
+Foram implementadas as seguintes alterações:
+- Configuração do **Pool do PostgreSQL** em `db.js` com variáveis de ambiente para host, usuário, senha, porta e database.
+- Ajuste das rotas de upload, listagem e exclusão (`documents.ts`) para:
+  - Inserir metadados de arquivos no banco de dados (`filename`, `original_name`, `size`, `path`, `upload_date`).
+  - Listar documentos a partir da tabela do banco, mantendo ordem por data de envio.
+  - Deletar documentos tanto do disco quanto do banco, garantindo consistência.
+- Criação da **tabela `documents`** no PostgreSQL com os campos necessários para o sistema RAG.
+- Sistema pronto para futura integração com IA + RAG, mantendo o histórico de documentos.
