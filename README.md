@@ -8,7 +8,7 @@ Projeto inicial de um Chat de Inteligência Artificial utilizando a abordagem RA
 - `backend/` - API Node.js + TypeScript + Express
 - `.env` - Arquivo para variáveis de ambiente (não incluído no repositório)
 
-## Como rodar localmente
+### Como rodar localmente
 
 ### Backend
 ```bash
